@@ -169,7 +169,7 @@ function dind::kube-up {
   dind::docker_compose up -d --force-recreate
   dind::step "Scaling dind cluster to ${NUM_NODES} slaves"
   dind::docker_compose scale node=${NUM_NODES}
-
+  dind::docker_compose scale hollow=${FAKE_NODES}
   dind::step -n "Waiting for https://${APISERVER_ADDRESS}:6443 to be healthy"
   while ! curl -o /dev/null -s --cacert ${DOCKER_IN_DOCKER_WORK_DIR}/auth/ca.pem https://${APISERVER_ADDRESS}:6443; do
     sleep 1
@@ -178,7 +178,7 @@ function dind::kube-up {
   echo
 
   dind::detect-master
-  dind::detect-nodes
+  #dind::detect-nodes
   dind::create-kubeconfig
 
   if [ "${ENABLE_CLUSTER_DNS}" == "true" ]; then

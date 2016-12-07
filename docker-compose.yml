@@ -100,6 +100,7 @@ controller:
 scheduler:
   hostname: scheduler
   image: k8s.io/kubernetes-dind
+  ports: ["10251:10251"]
   entrypoint:
   - /bin/bash
   - "-ceu"
@@ -108,5 +109,18 @@ scheduler:
     --address=$$(resolveip.sh scheduler)
     --master=http://apiserver:8888
     --v=4
+  links:
+  - apiserver
+hollow:
+  image: k8s.io/kubernetes-dind
+  entrypoint:
+  - /bin/bash
+  - "-ceu"
+  - >
+    kubemark
+    --master=http://apiserver:8888
+    --v=5
+    --morph=kubelet
+    --logtostderr
   links:
   - apiserver
