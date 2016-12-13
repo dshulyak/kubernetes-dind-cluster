@@ -196,7 +196,7 @@ function dind::kube-up {
 function dind::deploy-dns {
   dind::step "Deploying kube-dns"
   "cluster/kubectl.sh" create -f <(
-    for f in skydns-rc.yaml skydns-svc.yaml; do
+    for f in kubedns-controller.yaml kubedns-svc.yaml; do
       echo "---"
       eval "cat <<EOF
 $(<"cluster/addons/dns/${f}.sed")
@@ -290,3 +290,4 @@ elif [ $(basename "$0") = dind-down-cluster.sh ]; then
   source "${DIND_ROOT}/config.sh"
   dind::kube-down
 fi
+
